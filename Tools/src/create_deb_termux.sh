@@ -33,12 +33,12 @@ echo "Creating the rpm package"
 SPEC_FILE="${GO_SPACE}/packaging/linux/ssmcli.spec"
 BUILD_ROOT="${GO_SPACE}/bin/termux/linux"
 
-setarch i386 rpmbuild --target i386 -bb --define "rpmversion `cat ${GO_SPACE}/VERSION`" --define "_topdir bin/termux/linux/rpmbuild" --buildroot ${BUILD_ROOT} ${SPEC_FILE}
+setarch arm64 rpmbuild --target arm64 -bb --define "rpmversion `cat ${GO_SPACE}/VERSION`" --define "_topdir bin/termux/linux/rpmbuild" --buildroot ${BUILD_ROOT} ${SPEC_FILE}
 
 echo "Copying rpm files to bin"
 
-cp ${GO_SPACE}/bin/termux/linux/rpmbuild/RPMS/i386/*.rpm ${GO_SPACE}/bin/
-cp ${GO_SPACE}/bin/termux/linux/rpmbuild/RPMS/i386/*.rpm ${GO_SPACE}/bin/termux/ssmcli.rpm
+cp ${GO_SPACE}/bin/termux/linux/rpmbuild/RPMS/termux/*.rpm ${GO_SPACE}/bin/
+cp ${GO_SPACE}/bin/termux/linux/rpmbuild/RPMS/termux/*.rpm ${GO_SPACE}/bin/termux/ssmcli.rpm
 
 echo "Copying install and uninstall script to bin"
 
@@ -49,7 +49,7 @@ chmod 755 ${GO_SPACE}/bin/termux/install.sh ${GO_SPACE}/bin/termux/uninstall.sh
 
 echo "Zip rpm, install and uninstall files"
 
-tar -zcvf ${GO_SPACE}/bin/updates/ssmcli/`cat ${GO_SPACE}/VERSION`/ssmcli-linux-386.tar.gz  -C ${GO_SPACE}/bin/termux/ ssmcli.rpm install.sh uninstall.sh
+tar -zcvf ${GO_SPACE}/bin/updates/ssmcli/`cat ${GO_SPACE}/VERSION`/ssmcli-linux-termux.tar.gz  -C ${GO_SPACE}/bin/termux/ ssmcli.rpm install.sh uninstall.sh
 
 rm ${GO_SPACE}/bin/termux/install.sh
 rm ${GO_SPACE}/bin/termux/uninstall.sh

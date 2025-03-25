@@ -102,12 +102,14 @@ var setSessionHandlersWithSessionType = func(session *Session, log log.T) error 
 
 // Set up a scheduler to listen on stream data resend timeout event
 var handleStreamMessageResendTimeout = func(session *Session, log log.T) {
+	fmt.Fprintf(os.Stdout, "Setting up scheduler to listen on IsStreamMessageResendTimeout event.\n")
 	log.Tracef("Setting up scheduler to listen on IsStreamMessageResendTimeout event.")
 	go func() {
 		for {
 			// Repeat this loop for every 200ms
 			time.Sleep(config.ResendSleepInterval)
 			if <-session.DataChannel.IsStreamMessageResendTimeout() {
+				fmt.Fprintf(os.Stdout, "Session ending with error: %v\n", errors.New("stream data resend timeout"))
 				log.Errorf("Terminating session %s as the stream data was not processed before timeout.", session.SessionId)
 				if err := session.TerminateSession(log); err != nil {
 					log.Errorf("Unable to terminate session upon stream data timeout. %v", err)
@@ -225,6 +227,7 @@ func (s *Session) Execute(log log.T) (err error) {
 	s.DisplayMode = sessionutil.NewDisplayMode(log)
 
 	if err = s.OpenDataChannel(log); err != nil {
+		fmt.Fprintf(os.Stdout, "Failed to open data channel: %v\n", err)
 		log.Errorf("Error in Opening data channel: %v", err)
 		return
 	}
@@ -233,12 +236,14 @@ func (s *Session) Execute(log log.T) (err error) {
 
 	// The session type is set either by handshake or the first packet received.
 	if !<-s.DataChannel.IsSessionTypeSet() {
+		fmt.Fprintf(os.Stdout, "Session ending with error: %v\n", errors.New("unable to determine SessionType"))
 		log.Errorf("unable to set SessionType for session %s", s.SessionId)
 		return errors.New("unable to determine SessionType")
 	} else {
 		s.SessionType = s.DataChannel.GetSessionType()
 		s.SessionProperties = s.DataChannel.GetSessionProperties()
 		if err = setSessionHandlersWithSessionType(s, log); err != nil {
+			fmt.Fprintf(os.Stdout, "Session ending with error: %v\n", err)
 			log.Errorf("Session ending with error: %v", err)
 			return
 		}
