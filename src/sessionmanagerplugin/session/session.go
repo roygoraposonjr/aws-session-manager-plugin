@@ -103,7 +103,7 @@ var setSessionHandlersWithSessionType = func(session *Session, log log.T) error 
 // Set up a scheduler to listen on stream data resend timeout event
 var handleStreamMessageResendTimeout = func(session *Session, log log.T) {
 	fmt.Fprintf(os.Stdout, "Setting up scheduler to listen on IsStreamMessageResendTimeout event.\n")
-	// log.Tracef("Setting up scheduler to listen on IsStreamMessageResendTimeout event.")
+	log.Tracef("Setting up scheduler to listen on IsStreamMessageResendTimeout event.")
 	go func() {
 		for {
 			fmt.Fprintf(os.Stdout, "Waiting for stream data resend timeout event.\n")
@@ -233,7 +233,7 @@ func (s *Session) Execute(log log.T) (err error) {
 		return
 	}
 
-	// handleStreamMessageResendTimeout(s, log)
+	handleStreamMessageResendTimeout(s, log)
 
 	// The session type is set either by handshake or the first packet received.
 	if !<-s.DataChannel.IsSessionTypeSet() {
