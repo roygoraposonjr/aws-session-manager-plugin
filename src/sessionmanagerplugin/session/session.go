@@ -233,7 +233,7 @@ func (s *Session) Execute(log log.T) (err error) {
 		return
 	}
 
-	handleStreamMessageResendTimeout(s, log)
+	// handleStreamMessageResendTimeout(s, log)
 
 	// The session type is set either by handshake or the first packet received.
 	if !<-s.DataChannel.IsSessionTypeSet() {
