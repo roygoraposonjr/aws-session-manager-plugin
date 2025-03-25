@@ -1,0 +1,14 @@
+[Unit]
+Description=session-manager-plugin
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/data/data/com.termux/files/usr/local/sessionmanagerplugin/bin/
+ExecStart=/data/data/com.termux/files/usr/local/sessionmanagerplugin/bin/session-manager-plugin
+KillMode=process
+Restart=on-failure
+RestartSec=10min
+
+[Install]
+WantedBy=multi-user.target
