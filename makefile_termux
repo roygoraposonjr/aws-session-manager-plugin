@@ -19,10 +19,10 @@ checkstyle::
 	$(GO_SPACE)/Tools/src/checkstyle.sh
 
 build:: build-termux 
-# prepack:: prepack-termux  
-# package:: create-package-folder package-termux
+prepack:: prepack-termux  
+package:: create-package-folder package-termux
 
-# release:: clean checkstyle release-test pre-release build prepack package copy-package-dependencies
+release:: clean checkstyle release-test pre-release build prepack package copy-package-dependencies
 
 clean:: remove-prepacked-folder
 	rm -rf build/* bin/ pkg/ vendor/bin/ vendor/pkg/ .cover/
